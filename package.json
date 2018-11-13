@@ -1,0 +1,21 @@
+{
+  "name": "@synetic/image-optimizer",
+  "version": "0.2.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [
+    "Node",
+    "NPM",
+    "Synetic"
+  ],
+  "author": "Stef Spakman <mail@stefspakman.com>",
+  "license": "ISC",
+  "dependencies": {
+    "imagemin": "5.3.1",
+    "imagemin-gifsicle": "5.2.0",
+    "imagemin-jpegoptim": "5.2.0",
+    "imagemin-pngquant": "5.1.0",
+    "imagemin-svgo": "6.0.0",
+    "imagemin-webp": "4.1.0"
+  }
+}
