@@ -39,17 +39,17 @@ const
     imageminWebp = require('imagemin-webp'); //Webp plugin for imagemin
 
 module.exports = (config, path) => {
-    var basePath = path.replace('**/*', '');
-    fs.readdir(basePath, (err, files) => {
+    var basepath = path.replace('**/*', '');
+    fs.readdir(basepath, (err, files) => {
         if (files === undefined) return;
         files.forEach(file => {
-            if (fs.lstatSync(basePath + file).isDirectory()) {
-                optimizeImage(basePath + file + '**/*', basepath + config.dist + file);
-                if (config.webp.use) convertWebP(basePath + file + '**/*', basepath + config.dist + file);
+            if (fs.lstatSync(basepath + file).isDirectory()) {
+                optimizeImage(basepath + file + '**/*', basepath + config.dist + file);
+                if (config.webp.use) convertWebP(basepath + file + '**/*', basepath + config.dist + file);
             }
         });
-        optimizeImage(basePath + '*.*', basepath + config.dist);
-        if (config.webp.use) convertWebP(basePath + '*.*', basepath + config.dist);
+        optimizeImage(basepath + '*.*', basepath + config.dist);
+        if (config.webp.use) convertWebP(basepath + '*.*', basepath + config.dist);
     });
 };
 
