@@ -30,56 +30,56 @@ config:
 * */
 
 const
-    fs = require('fs'),
-    imagemin = require('imagemin'), //Optimize images
-    imageminGifsicle = require('imagemin-gifsicle'),
-    imageminJpegoptim = require('imagemin-jpegoptim'), //jpegoptim plugin for imagemin
-    imageminPngquant = require('imagemin-pngquant'), //PNGquant plugin for imagemin
-    imageminSvgo = require('imagemin-svgo'),
-    imageminWebp = require('imagemin-webp'); //Webp plugin for imagemin
+  path = require('path'),
+  recursive = require("recursive-readdir"),
+  imagemin = require('imagemin'), //Optimize images
+  imageminGifsicle = require('imagemin-gifsicle'),
+  imageminJpegoptim = require('imagemin-jpegoptim'), //jpegoptim plugin for imagemin
+  imageminPngquant = require('imagemin-pngquant'), //PNGquant plugin for imagemin
+  imageminSvgo = require('imagemin-svgo'),
+  imageminWebp = require('imagemin-webp'); //Webp plugin for imagemin
 
-module.exports = (config, path) => {
-    var basepath = path.replace('**/*', '');
-    fs.readdir(basepath, (err, files) => {
-        if (files === undefined) return;
-        files.forEach(file => {
-            if (fs.lstatSync(basepath + file).isDirectory()) {
-                optimizeImage(config, basepath + file + '**/*', basepath + config.dist + file);
-                if (config.webp.use) convertWebP(basepath + file + '**/*', basepath + config.dist + file);
-            }
-        });
-        optimizeImage(config, basepath + '*.*', basepath + config.dist);
-        if (config.webp.use) convertWebP(basepath + '*.*', basepath + config.dist);
+module.exports = (config) => {
+  var basepath = path.resolve(config.source.replace('**/*', ''));
+  recursive(basepath, (err, files) => {
+    if (files === undefined) return;
+    files.forEach(file => {
+      let dest = file.replace(basepath, '');
+      dest = dest.substr(0, dest.lastIndexOf('/'));
+      console.log(file, basepath, dest);
+      optimizeImage(config, file, `${config.destination}/${dest}`);
+      if (config.webp.use) convertWebP(basepath + '*.*',  `${config.destination}/${dest}`);
     });
+  });
 };
 
-function optimizeImage(path, dest) {
-    imagemin([path], dest, {
-        plugins: [
-            imageminGifsicle({
-                interlaced: config.gif.interlaced,
-                optimizationLevel: config.gif.optimizationlevel
-            }),
-            imageminJpegoptim({
-                progressive: config.jpeg.progressive,
-                max: config.jpeg.max
-            }),
-            imageminPngquant({
-                floyd: config.png.floyd,
-                nofs: config.png.nofs,
-                quality: config.png.quality,
-                speed: config.png.speed,
-                verbose: config.png.verbose
-            }),
-            imageminSvgo()
-        ]
-    });
+function optimizeImage(config, path, dest) {
+  imagemin([path], dest, {
+    plugins: [
+      imageminGifsicle({
+        interlaced: config.gif.interlaced,
+        optimizationLevel: config.gif.optimizationlevel
+      }),
+      imageminJpegoptim({
+        progressive: config.jpeg.progressive,
+        max: config.jpeg.max
+      }),
+      imageminPngquant({
+        floyd: config.png.floyd,
+        nofs: config.png.nofs,
+        quality: config.png.quality,
+        speed: config.png.speed,
+        verbose: config.png.verbose
+      }),
+      imageminSvgo()
+    ]
+  });
 }
 
 function convertWebP(path, dest) {
-    imagemin([path], dest, {
-        plugins: [
-            imageminWebp({quality: 50})
-        ]
-    });
+  imagemin([path], dest, {
+    plugins: [
+      imageminWebp({quality: 50})
+    ]
+  });
 }

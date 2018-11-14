@@ -16,6 +16,7 @@
     "imagemin-jpegoptim": "5.2.0",
     "imagemin-pngquant": "5.1.0",
     "imagemin-svgo": "6.0.0",
-    "imagemin-webp": "4.1.0"
+    "imagemin-webp": "4.1.0",
+    "recursive-readdir": "^2.2.2"
   }
 }
