@@ -46,7 +46,6 @@ module.exports = (config) => {
     files.forEach(file => {
       let dest = file.replace(basepath, '');
       dest = dest.substr(0, dest.lastIndexOf('/'));
-      console.log(file, basepath, dest);
       optimizeImage(config, file, `${config.destination}/${dest}`);
       if (config.webp.use) convertWebP(basepath + '*.*',  `${config.destination}/${dest}`);
     });
