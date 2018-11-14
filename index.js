@@ -44,11 +44,11 @@ module.exports = (config, path) => {
         if (files === undefined) return;
         files.forEach(file => {
             if (fs.lstatSync(basepath + file).isDirectory()) {
-                optimizeImage(basepath + file + '**/*', basepath + config.dist + file);
+                optimizeImage(config, basepath + file + '**/*', basepath + config.dist + file);
                 if (config.webp.use) convertWebP(basepath + file + '**/*', basepath + config.dist + file);
             }
         });
-        optimizeImage(basepath + '*.*', basepath + config.dist);
+        optimizeImage(config, basepath + '*.*', basepath + config.dist);
         if (config.webp.use) convertWebP(basepath + '*.*', basepath + config.dist);
     });
 };
